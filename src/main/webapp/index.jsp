@@ -25,5 +25,9 @@
 
 <a href="/sysUserController/showUserToJSONById/1" target="_blank">查询用户信息并直接输出JSON数据</a>
 
+<br>
+
+<a href="/sysUserController/beginCellGame" target="_blank">开始细胞游戏</a>
+
 </body>
 </html>

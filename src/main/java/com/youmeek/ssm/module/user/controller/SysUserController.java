@@ -1,5 +1,6 @@
 package com.youmeek.ssm.module.user.controller;
 
+import com.youmeek.ssm.module.user.Dto.ResultDto;
 import com.youmeek.ssm.module.user.pojo.SysUser;
 import com.youmeek.ssm.module.user.service.SysUserService;
 import org.slf4j.Logger;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
@@ -47,7 +49,20 @@ public class SysUserController {
 		LOG.error("-----------------------------------error");
 		return new Date();
 	}
-	
+
+	@RequestMapping(value = "/changeCellState" ,method = RequestMethod.POST)
+	@ResponseBody
+	public ResultDto changeCellState(){
+		int [][]cell = new int[10][10];
+		ResultDto resultDto = new ResultDto();
+		resultDto.setCellCube(cell);
+		return resultDto;
+	}
+
+	@RequestMapping("/beginCellGame")
+	public String beginCellGame(){
+		return "cellGame";
+	}
 
 
 
