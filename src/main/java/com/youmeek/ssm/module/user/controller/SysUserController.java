@@ -1,6 +1,7 @@
 package com.youmeek.ssm.module.user.controller;
 
 import com.youmeek.ssm.module.user.Dto.ResultDto;
+import com.youmeek.ssm.module.user.Dto.Singleton;
 import com.youmeek.ssm.module.user.pojo.SysUser;
 import com.youmeek.ssm.module.user.service.SysUserService;
 import org.slf4j.Logger;
@@ -50,10 +51,17 @@ public class SysUserController {
 		return new Date();
 	}
 
-	@RequestMapping(value = "/changeCellState" ,method = RequestMethod.POST)
+	@RequestMapping("/changeCellState")
 	@ResponseBody
 	public ResultDto changeCellState(){
-		int [][]cell = new int[10][10];
+		Singleton singleton = Singleton.GetInstance();
+		int [][]cell = singleton.getCube();
+		for (int i = 0; i< 10; i++){
+			for (int j = 0; j < 10; j++){
+				cell[i][j] += 1;
+			}
+		}
+		singleton.setCube(cell);
 		ResultDto resultDto = new ResultDto();
 		resultDto.setCellCube(cell);
 		return resultDto;
@@ -61,6 +69,9 @@ public class SysUserController {
 
 	@RequestMapping("/beginCellGame")
 	public String beginCellGame(){
+		Singleton singleton = Singleton.GetInstance();
+		int [][]cube = new int[10][10];
+		singleton.setCube(cube);
 		return "cellGame";
 	}
 
