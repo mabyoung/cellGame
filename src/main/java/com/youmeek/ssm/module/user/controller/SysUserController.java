@@ -71,8 +71,8 @@ public class SysUserController {
 				} else {
 					cell[i][j] = 0;
 				}
+				count = 0;
 			}
-			count = 0;
 		}
 		singleton.setCube(cell);
 		ResultDto resultDto = new ResultDto();
