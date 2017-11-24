@@ -72,9 +72,8 @@
                     }
                 }
             }
-            setTimeout(GetPara(),1000);
+            setTimeout("GetPara()",10);
         }
-
     };
 
 </script>

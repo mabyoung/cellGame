@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.xml.transform.Result;
 import java.util.Date;
 import java.util.Random;
 
@@ -98,6 +99,17 @@ public class SysUserController {
 		return "cellGame";
 	}
 
-
+	@RequestMapping("/test")
+	@ResponseBody
+	public ResultDto test(ResultDto resultDto){
+		int[][]cube = resultDto.getCellCube();
+		for (int i = 0; i < cube.length; i++){
+			for (int j = 0; j< cube[i].length; j++){
+				cube[i][j] +=1;
+			}
+		}
+		resultDto.setCellCube(cube);
+		return resultDto;
+	}
 
 }
