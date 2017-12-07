@@ -1,4 +1,4 @@
-package com.youmeek.ssm.module.user.Dto;
+package com.youmeek.ssm.module.user.dto;
 
 public class Singleton {
     private int[][] cube;

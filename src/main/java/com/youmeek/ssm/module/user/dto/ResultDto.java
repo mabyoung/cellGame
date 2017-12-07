@@ -1,4 +1,4 @@
-package com.youmeek.ssm.module.user.Dto;
+package com.youmeek.ssm.module.user.dto;
 
 import java.io.Serializable;
 import java.util.Arrays;

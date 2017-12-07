@@ -10,7 +10,7 @@ public class Calculator {
     public void divide(int n) {  result = result / n;  }
     public void square(int n) {   result = n * n;  }
     public void squareRoot(int n) { //求平方根
-        for (;;);   //Bug : 死循环
+        for (;;){;}   //Bug : 死循环
     }
     public void clear() {  // 将结果清零
         result = 0;

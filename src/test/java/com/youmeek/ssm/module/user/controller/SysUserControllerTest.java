@@ -10,16 +10,6 @@ public class SysUserControllerTest {
     private SysUserController sysUserController;
 
     @Test
-    public void showUser() throws Exception {
-        sysUserController.showUser(1L);
-    }
-
-    @Test
-    public void testLogback() throws Exception {
-        sysUserController.testLogback();
-    }
-
-    @Test
     public void changeCellState() throws Exception {
         sysUserController.changeCellState();
     }

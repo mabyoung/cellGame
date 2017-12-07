@@ -66,13 +66,12 @@
             cxt.stroke();
             for (var x = 0; x < tt.cellCube.length; x++) {
                 for (var y = 0; y < tt.cellCube[x].length; y++) {
-                    //alert(x+" "+y+" "+board[x][y]);
                     if (tt.cellCube[x][y] == 1) {
                         cxt.fillRect(xOffset + x * gridSize, yOffset + y * gridSize, gridSize - 1, gridSize - 1);
                     }
                 }
             }
-            setTimeout("GetPara()",10);
+            setTimeout("GetPara()",100);
         }
     };
 
