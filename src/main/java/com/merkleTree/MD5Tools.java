@@ -41,7 +41,8 @@ public abstract class MD5Tools
             }
 
             //返回经过加密后的字符串
-            return new String(str);
+            String result = new String(str);
+            return result;
 
         } catch (Exception e) {
             return null;

@@ -1,24 +1,29 @@
 package com.merkleTree;
 
+import com.alibaba.fastjson.JSON;
+
 import javax.sound.sampled.Line;
+import javax.swing.plaf.basic.BasicScrollPaneUI;
+import javax.xml.crypto.Data;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.*;
 
 public class MerkleTree {
-    private Integer lineLength = 30;
     private String root;
-    private List<String> mt;
+    //private HashMap<String, List<Object>> mt;
     private HashMap<String, String> hashList;
-    private String topHash;
+    //private String topHash;
 
     public MerkleTree(String root){
         this.root = root;
+        hashList = new HashMap<>();
         MT2();
     }
 
     public void line(){
-        System.out.print(this.lineLength);
+        System.out.println("----------------------");
     }
 
     public void printHashList(){
@@ -26,18 +31,68 @@ public class MerkleTree {
         Iterator iter = hashList.entrySet().iterator();
         while (iter.hasNext()) {
             Map.Entry entry = (Map.Entry) iter.next();
+            Object key = entry.getKey();
             Object val = entry.getValue();
-            System.out.print(val);
+            System.out.print(key);
+            System.out.print(" : ");
+            System.out.println(val);
         }
         line();
     }
 
-    public void MT1(){
+//    public void printMT(String hash){
+//        List<Object> value = mt.get(hash);
+//        Object item = value.get(0);
+//        Object child = value.get(1);
+//        System.out.print(item);
+//        System.out.print(child);
+//        if (child == null){
+//            return;
+//        }
+//    }
 
+    public void MT1(){
+        Iterator iter = hashList.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry entry = (Map.Entry) iter.next();
+            String key = (String)entry.getKey();
+            String val = (String)entry.getValue();
+            List<String> items = getItems(key);
+            List<Object> value = new ArrayList<>();
+            HashMap<String,String> list = new HashMap<>();
+            value.add(key);
+            for (String item : items){
+                if (key == this.root){
+                    list.put(hashList.get(item),item);
+                } else {
+                    list.put(hashList.get(key+"\\"+item),key+"\\"+item);
+                }
+            }
+            value.add(list);
+            System.out.print(value);
+        }
     }
 
     public void MT2(){
+        hashList(this.root);
+        MT1();
+        //printHashList();
+        //MT3();
+    }
 
+    public void MT3(){
+        Map<Integer,TreeTest> map = new HashMap<Integer,TreeTest>();
+        TreeTest terr1 = new TreeTest(1,0, root, hashList.get(root));
+        map.put(terr1.getId(), terr1);
+        int n = 1;
+        for (String item : getItems(root)){
+            TreeTest tmp = new TreeTest(n,1,item,hashList.get(item));
+            map.put(tmp.getId(),tmp);
+        }
+
+        List<TreeTest> li =  TreeTest.getChildren(map,0,1);
+
+        System.out.println(JSON.toJSON(li));
     }
 
     public String md5sum(String data){
@@ -59,20 +114,19 @@ public class MerkleTree {
                     sb.append(new String(buf, 0, len, "utf-8"));
                 }
                 // 输出字符串
-                System.out.println(sb.toString());
+                String result = MD5Tools.MD5(sb.toString());
+                return result;
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            while(true){
-                String d = f.read
-            }
         }
+        return MD5Tools.MD5(data);
     }
 
     public List<String> getItems(String directory){
         List<String> value = new ArrayList<>();
         if (directory != this.root){
-
+            directory = root+"\\"+directory;
         }
         File f = new File(directory);
         if (f.isDirectory()){
@@ -87,27 +141,49 @@ public class MerkleTree {
 
     public void hashList(String rootDir){
         hashListChild(rootDir);
+        List<String> items = getItems(rootDir);
+        if (items == null){
+            hashList.put(rootDir,"");
+        }
+        String s = "";
+        for (String item : items){
+            s += hashList.get(item);
+        }
+        hashList.put(rootDir,md5sum(s));
     }
 
     public void hashListChild(String rootDir){
         List<String> items = getItems(rootDir);
         if (items == null){
+            hashList.put(rootDir,"");
             return;
         }
         for (String item : items){
-            String itemname = rootDir+"\\"+"item";
+            String itemname = rootDir+"\\"+item;
             File f = new File(itemname);
             if (f.isDirectory()){
                 hashListChild(item);
+                List<String> subitems = getItems(item);
+                String s = "";
+                for (String subitem : subitems){
+                    s += hashList.get(item +"\\" + subitem);
+                }
+                if (rootDir == this.root){
+                    hashList.put(item,md5sum(s));
+                } else {
+                    hashList.put(itemname,md5sum(s));
+                }
             } else {
                 if (rootDir == this.root){
                     hashList.put(item,md5sum(item));
+                } else {
+                    hashList.put(itemname,md5sum(itemname));
                 }
             }
         }
     }
 
     public static void main(String[] args) {
-        MerkleTree mt1 = new MerkleTree("testA");
+        MerkleTree mt1 = new MerkleTree("e:/testA");
     }
 }
