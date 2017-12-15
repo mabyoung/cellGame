@@ -50,7 +50,6 @@ public class SysUserController {
 		int [][]cube = new int[M][N];
 		for (int i = 0; i < M; i++){
 			for (int j = 0; j < N; j++){
-				cube[i][j] = 0;
 				cube[i][j] = random.nextInt(2);
 			}
 		}
