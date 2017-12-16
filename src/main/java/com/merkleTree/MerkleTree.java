@@ -1,10 +1,4 @@
 package com.merkleTree;
-
-import com.alibaba.fastjson.JSON;
-
-import javax.sound.sampled.Line;
-import javax.swing.plaf.basic.BasicScrollPaneUI;
-import javax.xml.crypto.Data;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,13 +6,14 @@ import java.util.*;
 
 public class MerkleTree {
     private String root;
-    //private HashMap<String, List<Object>> mt;
-    private HashMap<String, String> hashList;
-    //private String topHash;
+    private HashMap<String, List<Object>> mt;
+    private LinkedHashMap<String, String> hashList;
+    private String topHash;
 
     public MerkleTree(String root){
         this.root = root;
-        hashList = new HashMap<>();
+        hashList = new LinkedHashMap<>();
+        mt = new HashMap<>();
         MT2();
     }
 
@@ -40,16 +35,34 @@ public class MerkleTree {
         line();
     }
 
-//    public void printMT(String hash){
-//        List<Object> value = mt.get(hash);
-//        Object item = value.get(0);
-//        Object child = value.get(1);
-//        System.out.print(item);
-//        System.out.print(child);
-//        if (child == null){
-//            return;
-//        }
-//    }
+    public void printMT(String hash){
+        List<Object> value = mt.get(hash);
+        if (value == null){
+            return;
+        }
+        Object item = value.get(0);
+        HashMap<String, String> child = (HashMap) value.get(1);
+        System.out.print(hash);
+        System.out.print(item);
+        if (child == null){
+            return;
+        }
+        Iterator iter = child.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry entry = (Map.Entry) iter.next();
+            Object key = entry.getKey();
+            Object val = entry.getValue();
+            System.out.print(key);
+            System.out.print(" : ");
+            System.out.println(val);
+        }
+        iter = hashList.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry entry = (Map.Entry) iter.next();
+            String key = (String)entry.getKey();
+            printMT(key);
+        }
+    }
 
     public void MT1(){
         Iterator iter = hashList.entrySet().iterator();
@@ -69,30 +82,17 @@ public class MerkleTree {
                 }
             }
             value.add(list);
-            System.out.print(value);
+            mt.put(val, value);
         }
+        topHash = hashList.get(root);
     }
 
     public void MT2(){
         hashList(this.root);
         MT1();
-        //printHashList();
+        printHashList();
         //MT3();
-    }
-
-    public void MT3(){
-        Map<Integer,TreeTest> map = new HashMap<Integer,TreeTest>();
-        TreeTest terr1 = new TreeTest(1,0, root, hashList.get(root));
-        map.put(terr1.getId(), terr1);
-        int n = 1;
-        for (String item : getItems(root)){
-            TreeTest tmp = new TreeTest(n,1,item,hashList.get(item));
-            map.put(tmp.getId(),tmp);
-        }
-
-        List<TreeTest> li =  TreeTest.getChildren(map,0,1);
-
-        System.out.println(JSON.toJSON(li));
+        //printMT(topHash);
     }
 
     public String md5sum(String data){
